@@ -1,0 +1,186 @@
+/*
+Theme Name: Storefront child
+Template: storefront
+*/
+
+/* импортируем стили родительской темы */
+@import url("../storefront/style.css");
+
+
+.link-btn {
+    display: block;
+    width: 250px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    background: #2c2d33;
+    color: #fff;
+    font-size: 15px;
+    text-transform: Uppercase;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+	margin-bottom: 20px;
+	margin-left: auto;
+}
+
+
+.submit-row {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.submit-btn {
+	display: block;
+	width: 250px;
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+	background: #2c2d33;
+	color: #fff;
+	font-size: 15px;
+	text-transform: Uppercase;
+	font-weight: 600;
+	border-radius: 5px;
+	cursor: pointer;
+}
+				
+.data-row {
+  margin-bottom: 1rem;
+}
+/* стили для label */
+.data-row label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 18px;
+}
+/* стили для input */
+.data-row input[type="text"], .data-row input[type="number"] {
+  display: block;
+  width: 100%;
+  height: 40px;
+  padding: 5px 10px;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #bdbdbd;
+  border-radius: 5px;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+				
+.data-row input::placeholder {
+  color: #212529;
+  opacity: 0.4;
+}
+				
+.data-row input:focus {
+  color: #212529;
+  background-color: #fff;
+  border-color: #bdbdbd;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(158, 158, 158, 0.25);
+}
+
+.icon-right {
+  position: relative;
+}
+.icon-right::before {
+  content: ' ';
+  color: #bdbdbd;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  top: 0;
+  bottom: 0;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.icon-right input[type="text"], .icon-right input[type="number"] {
+  padding-left: 30px;
+}
+/* email значок */
+.icon-right.dollar::before {
+  content: '$';
+}
+/* counter */
+.text-field__counter {
+    display: block;
+    font-size: 16px;
+    text-align: right;
+	margin-bottom: -25px;}
+
+select#product_type {
+    display: block;
+    width: 100%;
+    height: 40px;
+    padding: 5px 10px;
+    padding-right: 20px;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #bdbdbd;
+    border-radius: 5px;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+				
+.form-input img {
+  width:100%;
+max-width: 150px;
+	max-height: 150px;
+  display:none;
+  margin-bottom:30px;
+}
+				
+.form-input input {
+  display:none;
+}
+
+.form-input label {
+  display:block;
+  width:250px;
+  height:40px;
+  margin-left: 0;
+  line-height:40px;
+  text-align:center;
+  background:#2c2d33;
+  color:#fff;
+  font-size:15px;
+  text-transform:Uppercase;
+  font-weight:600;
+  border-radius:5px;
+  cursor:pointer;
+}
+				
+ /*Validation */
+.data-row.invalid input {
+  border-color: #dc3545;
+  padding-right: 2.25rem;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.5625rem center;
+  background-size: 1.125rem 1.125rem;
+}
+/*.data-row input:valid {
+  border-color: #198754;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23198754' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+}*/
+.data-row.invalid input:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+}
+.data-row.valid input:focus {
+  border-color: #198754;
+  box-shadow: 0 0 0 0.25rem rgb(25 135 84 / 25%);
+}
+				
+.validation_text {
+	color: #dc3545;
+}

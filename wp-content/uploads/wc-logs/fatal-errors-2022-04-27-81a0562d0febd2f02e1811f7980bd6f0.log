@@ -1,0 +1,10 @@
+2022-04-27T20:32:56+00:00 CRITICAL Uncaught Error: Call to undefined function add_meta_box() in /var/www/vhosts/clicks.kz/httpdocs/wp-content/themes/twentytwenty/functions.php:793
+Stack trace:
+#0 /var/www/vhosts/clicks.kz/httpdocs/wp-settings.php(555): include()
+#1 /var/www/vhosts/clicks.kz/httpdocs/wp-config.php(76): require_once('/var/www/vhosts...')
+#2 /var/www/vhosts/clicks.kz/httpdocs/wp-load.php(50): require_once('/var/www/vhosts...')
+#3 /var/www/vhosts/clicks.kz/httpdocs/wp-admin/admin.php(34): require_once('/var/www/vhosts...')
+#4 /var/www/vhosts/clicks.kz/httpdocs/wp-admin/theme-editor.php(10): require_once('/var/www/vhosts...')
+#5 {main}
+  thrown в /var/www/vhosts/clicks.kz/httpdocs/wp-content/themes/twentytwenty/functions.php на строке 793
+

@@ -38,9 +38,9 @@ function postbox_func($post) {
 		<p class="form-field">
 			<label>Изображения</label>
 			<?php
-	/* Banner */ 
-	$banner_img = get_post_meta($post->ID,'post_banner_img',true);
-	?>
+				/* Banner */ 
+				$banner_img = get_post_meta($post->ID,'post_banner_img',true);
+				?>
 				<?php echo multi_media_uploader_field( 'post_banner_img', $banner_img ); ?>
 
 		</p>
@@ -55,6 +55,7 @@ function postbox_func($post) {
 		.multi-upload-medias ul li img { width: 100%; }
 </style>
 <script type="text/javascript">
+	// Uploader script
 		jQuery(function($) {
 
 			$('body').on('click', '.wc_multi_upload_image_button', function(e) {
@@ -120,6 +121,7 @@ function postbox_func($post) {
 
 
 function multi_media_uploader_field($name, $value = '') {
+	/* Uploader func */
 	$image = '">Добавить';
 	$image_str = '';
 	$image_size = 'full';
@@ -171,6 +173,7 @@ add_action( 'wp_ajax_createproduct', 'create_product_func' );
 add_action( 'wp_ajax_nopriv_createproduct', 'create_product_func' );
 
 function create_product_func() {
+	// Validation fields
 	$product_title = $_POST['product_title'];
 	$product_type = $_POST['product_type'];
 	$product_price = floatval($_POST['price']);
@@ -189,10 +192,10 @@ function create_product_func() {
 	}
 
 	
-	
-	if (	isset( $_POST['my_image_upload_nonce'] ) AND wp_verify_nonce( $_POST['my_image_upload_nonce'], 'my_image_upload' )) {
+	// Check image
+	if (isset( $_POST['my_image_upload_nonce'] ) AND wp_verify_nonce( $_POST['my_image_upload_nonce'], 'my_image_upload' )) {
 		if(!empty($_FILES['product_image']['name'])) {
-				$arr_img_ext = array('image/png', 'image/jpeg', 'image/jpg', 'image/gif');
+				$arr_img_ext = array('image/png', 'image/jpeg', 'image/jpg');
 
 				if (in_array($_FILES['product_image']['type'], $arr_img_ext)) {
 
@@ -227,7 +230,6 @@ function create_product_func() {
 
     $post_id = wp_insert_post( $post_args );
    
-    // If the post was created okay, let's try update the WooCommerce values.
     if ( ! empty( $post_id ) && function_exists( 'wc_get_product' ) ) {
         $product = wc_get_product( $post_id );
         $product->set_sku( 'pre-' . $post_id ); // Generate a SKU with a prefix. (i.e. 'pre-123') 
@@ -247,4 +249,135 @@ function create_product_func() {
 	}
 	
 	wp_die();
+}
+
+add_action( 'wp_footer', 'my_footer_scripts' );
+function my_footer_scripts(){
+	/* Create product page scripts */
+  ?>
+  	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script>
+$(document).ready(function () {
+	// ON KEY UP CLEAR INVALID
+	if($('input[type="text"],input[type="number"]').keyup(function() {
+		$(this).parent().removeClass('invalid');
+		$(this).parent().parent().removeClass('invalid');
+		$(this).parent().children('.validation_text').eq(0).text('');
+		$(this).parent().parent().children('.validation_text').eq(0).text('');
+	}));
+	
+	// VALIDATION
+	
+	$('input[name="product_image"]').change(function (event) {
+		var err = 0;
+		var validExtensions = ["jpg",,"jpeg","png"]
+		var file = $(this).val().split('.').pop();
+		if (validExtensions.indexOf(file) == -1) {
+			$('input[name="product_image"]').val('');
+			$('input[name="product_image"]').parent().parent().addClass('invalid');
+			$('input[name="product_image"]').parent().parent().children('.validation_text').eq(0).text('Allowed only .png,.jpg,.jpeg');
+			err++;
+		} else if($(this).prop('files')[0].size > 200000) {
+			$('input[name="product_image"]').val('');
+			$('input[name="product_image"]').parent().parent().addClass('invalid');
+			$('input[name="product_image"]').parent().parent().children('.validation_text').eq(0).text('Size limit 200kb');
+			err++;
+		} else {
+			showPreview(event);
+			$('input[name="product_image"]').parent().parent().children('.validation_text').eq(0).text('');
+		}
+
+	});
+	
+	// SEND AJAX
+ 
+    $(".submit-btn").click(function (event) {
+ 		var err = 0;
+        //stop submit the form, we will post it manually.
+        event.preventDefault();
+		
+		
+		if($('input[name="product_title"]').val().length < 3 || $('input[name="product_title"]').val().length > 30) {
+			$('input[name="product_title"]').parent().addClass('invalid');
+			$('input[name="product_title"]').parent().children('.validation_text').eq(0).text('Length of this row must to be at least 3 symbols and not large 30 symobols');
+			err++;
+		}
+		
+		if($('input[name="price"]').val().length < 1 || $('input[name="price"]').val().length > 6) {
+			$('input[name="price"]').parent().parent().addClass('invalid');
+			$('input[name="price"]').parent().parent().children('.validation_text').eq(0).text('Write a correct price(max $1M)');
+			err++;
+		}
+
+		if(err == 0) {
+			
+			// Get form
+			var form = $('#create-product')[0];
+
+		   // Create an FormData object 
+			var datas = new FormData(form);
+
+		   // disabled the submit button
+			$(".submit-btn").addClass('loading');
+			$(".submit-btn").text('Creating');
+
+			datas.append('action', 'createproduct');
+			
+			$.ajax({
+				type: "POST",
+				url: "<?php echo admin_url( "admin-ajax.php" ) ?>",
+				data: datas, // можно также передать в виде массива или объекта
+				processData: false,
+				contentType: false,
+				success: function (data) {
+
+					console.log("RES: ", data);
+					$(".submit-btn").removeClass('loading');
+					$(".submit-btn").text('Create');
+					if(JSON.parse(data)['status'] == 1) {
+						$(".submit-btn").text('Ready');
+						window.location.href = JSON.parse(data)['text'];
+					} else {
+						alert(JSON.parse(data)['text']);
+					}
+					
+
+				},
+				error: function (e) {
+
+					$("#output").text(e);
+					console.log("ERROR : ", e);
+					$(".submit-btn").removeClass('loading');
+
+				}
+			});
+		}
+ 
+    });
+ 
+});		
+	
+/* INPUT COUNTER */
+const elemLogin = document.querySelector('.counter');
+const elemCounter = elemLogin.nextElementSibling;
+const maxLength = elemLogin.maxLength;
+const updateCounter = (e) => {
+  const len = e ? e.target.value.length : 0;
+  elemCounter.textContent = `${len} / ${maxLength}`;
+}
+updateCounter();
+elemLogin.addEventListener('keyup', updateCounter);
+elemLogin.addEventListener('keydown', updateCounter);
+	
+/* UPLOADER PREVIEW */
+ function showPreview(event){
+  if(event.target.files.length > 0){
+    var src = URL.createObjectURL(event.target.files[0]);
+    var preview = document.getElementById("file-ip-1-preview");
+    preview.src = src;
+    preview.style.display = "block";
+  }
+}
+</script>
+  <?php
 }

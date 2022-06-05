@@ -4,6 +4,6 @@
  
  ADMIN: https://clicks.kz/wp-admin
  login: admin
- login: testwork412
+ login: testwork
  
  Create product page: https://clicks.kz/create-product
